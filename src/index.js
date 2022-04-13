@@ -1,33 +1,13 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-const changeState = (prop) => {
-  return (value) => {
-    return (obj) => ({
-      ...obj,
-      [prop] : (obj[prop] || 0) + value
-    })
-  }
-} 
-
-const orb = changeState("power")(50); 
-
-// let wizard = { power: 0, fortitude: 0, wisdom: 0 } 
-orb(wizard);
-  result: {power: 50, fortitude: 0, wisdom: 0}
+// const changeState = (prop) => {
+//   return (value) => {
+//     return (obj) => ({
+//       ...obj,
+//       [prop] : (obj[prop] || 0) + value
+//     })
+//   }
+// } 
  
- 
-  const changeState2 = (prop1, prop2, prop3) => {
+const itemBonus = (prop1, prop2, prop3) => {
   return (value) => {
     return (obj) => ({
       ...obj,
@@ -85,4 +65,45 @@ statRoll = function() {
 
 const baseCharStats = assignStats("intel", "dex", "str", "char", "wis", "cons")(statRoll(), statRoll(), statRoll(), statRoll(), statRoll(), statRoll());
 let wizard = {};
-baseWiz(wizard);
+baseCharStats(wizard);
+
+
+// This function stores our state.
+
+const storeState = () => {
+  let currentState = {};
+  return (stateChangeFunction = state => state) => {
+    const newState = stateChangeFunction(currentState);
+    currentState = {...newState};
+    return newState;
+  };
+};
+
+const stateControl = storeState();
+
+// This is a function factory. We can easily create more specific functions that alter a plant's soil, water, and light to varying degrees.
+
+const changeState = (prop) => {
+  return (value) => {
+    return (state) => ({
+      ...state,
+      [prop] : (state[prop] || 0) + value
+    });
+  };
+};
+
+// We create four functions using our function factory. We could easily create many more.
+
+// const feed = changeState("soil")(1);
+const blueFood = changeState("soil")(5); 
+const redFood = changeState("soil")(8);
+
+const hydrate = changeState("water")(1);
+const superWater = changeState("water")(5);
+
+
+Classes: 
+Warlock 
+Ranger
+Sorcerer
+Rogue
